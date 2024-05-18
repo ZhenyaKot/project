@@ -5,7 +5,7 @@ from django.shortcuts import render
 def index(request) -> HttpResponse:
     context = {
         'title': 'Home - Главная',
-        'content': 'Магазин мебели Home'
+        'content': 'Магазин Духов Perfume&Symphonies'
     }
 
     return render(request, 'main/index.html', context)
