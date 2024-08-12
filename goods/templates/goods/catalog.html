@@ -45,47 +45,87 @@
                     От дорогих к дешевым
                 </label>
             </div>
+        <div class="form-floating mx-3">
+      <label for="priceRange">Цена: от
+<output for="priceRangeLow" id="priceRangeLowOutput">0₽</output> до
+<output for="priceRangeHigh" id="priceRangeHighOutput">20000₽</output>
+</label>
+<!-- Range slider for selecting price range -->
+<input type="range" min="0" max="20000" value="{{ request.GET.lower_price_range|default:'0' }}" name="lower_price_range" id="priceRangeLow">
+<input type="range" min="0" max="20000" value="{{ request.GET.upper_price_range|default:'10000' }}" name="upper_price_range" id="priceRangeHigh">
+
+<script>
+const lowerRange = document.getElementById('priceRangeLow');
+const upperRange = document.getElementById('priceRangeHigh');
+const lowerOutput = document.getElementById('priceRangeLowOutput');  // Изменено для получения элемента по ID
+const upperOutput = document.getElementById('priceRangeHighOutput');  // Изменено для получения элемента по ID
+
+// Устанавливаем начальные значения при загрузке страницы
+lowerOutput.innerText = lowerRange.value + '₽';
+upperOutput.innerText = upperRange.value + '₽';
+
+// Обработчик изменений слайдера
+lowerRange.addEventListener('input', function() {
+    lowerOutput.innerText = lowerRange.value + '₽';
+});
+
+upperRange.addEventListener('input', function() {
+    upperOutput.innerText = upperRange.value + '₽';
+});
+</script>
+        </div>
             <button type="submit" class="btn btn-primary mx-3 mt-3">Применить</button>
         </form>
     </div>
 
 
+
+
     <!-- Карта товара -->
-    {% for product in goods %}
-    <div class="col-lg-4 col-md-6 p-4">
-        <div class="card border-primary rounded custom-shadow">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" width="500" height="500">
-            {% else %}
-            <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top" alt="...">
+    {%if no_results %}
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div style="text-align: center;">
+            <h1 style="color: black; font-size: 50px; ">Ничего не найдено</h1>
+            <p style="color: black; font-size: 20px; "> Попробуйте сбросить фильтры или изменить поиск.</p>
+        </div>
+    </div>
+    {% else %}
+        {% for product in goods %}
+        <div class="col-lg-4 col-md-6 p-4">
+            <div class="card border-primary rounded custom-shadow">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" width="500" height="500">
+                {% else %}
+                <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top" alt="...">
 
-            {% endif %}
-            <div class="card-body">
-                <a href="{% url 'catalog:product' product.slug %}">
-                    <p class="card-title">{{ product.name }}</p>
-                </a>
-                <p class="card-text text-truncate">{{ product.description }}</p>
-                <p class="product_id">id: {{ product.display_id}} </p>
-                <div class="d-flex justify-content-between">
-                    {% if product.discount %}
-                    <p><s>{{ product.price }}</s> $</p>
-                    <p><strong>{{ product.sell_price }} $</strong></p>
-                    <span class="badge bg-warning text-dark">Скидка {{ product.discount }} %</span>
-                    {% else %}
-                    <p><strong>{{ product.price }} $</strong></p>
-                    {% endif %}
-
-                    <a href="#" class="btn add-to-cart">
-                        <img class="mx-1" src="{% static 'deps/icons/cart-plus.svg' %}" alt="Catalog Icon"
-                             width="32" height="32">
+                {% endif %}
+                <div class="card-body">
+                    <a href="{% url 'catalog:product' product.slug %}">
+                        <p class="card-title">{{ product.name }}</p>
                     </a>
+                    <p class="card-text text-truncate">{{ product.description }}</p>
+                    <p class="product_id">id: {{ product.display_id}} </p>
+                    <div class="d-flex justify-content-between">
+                        {% if product.discount %}
+                        <p><s>{{ product.price }}</s> ₽</p>
+                        <p><strong>{{ product.sell_price }} ₽</strong></p>
+                        <span class="badge bg-warning text-dark">Скидка {{ product.discount }} %</span>
+                        {% else %}
+                        <p><strong>{{ product.price }} ₽</strong></p>
+                        {% endif %}
+
+                        <a href="#" class="btn add-to-cart">
+                            <img class="mx-1" src="{% static 'deps/icons/cart-plus.svg' %}" alt="Catalog Icon"
+                                 width="32" height="32">
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {% endfor %}
+        {% endfor %}
 
+    {% endif %}
 </div>
 
 
