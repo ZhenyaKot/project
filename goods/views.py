@@ -3,19 +3,24 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 from goods.models import Products
+from goods.utils import q_search
 
 
 # Create your views here.
 
-def catalog(request, category_slug):
+def catalog(request, category_slug=None):
     page = request.GET.get('page', 1)
     on_sale = request.GET.get('on_sale')
     order_by = request.GET.get('order_by')
+    query = request.GET.get('q', None)
     lower_price_range = request.GET.get('lower_price_range')
     upper_price_range = request.GET.get('upper_price_range')
 
+
     if category_slug == 'all':
         goods = Products.objects.all()
+    elif query:
+        goods = q_search(query)
     else:
         goods = Products.objects.filter(category__slug=category_slug)
 
