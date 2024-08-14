@@ -13,7 +13,7 @@
             Фильтры
         </button>
 
-        <form action="{% if request.GET.q %}{% url 'catalog:search' %}{% else %}'{% url 'catalog:index' slug_url %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+        <form action="{% if request.GET.q %}{% url 'catalog:search' %}{% else %}{% url 'catalog:index' slug_url %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
             <div class="form-check text-white mx-3">
                 <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on"
                        {% if request.GET.on_sale == 'on' %}checked{% endif %}>
@@ -49,11 +49,11 @@
         <div class="form-floating mx-3">
       <label for="priceRange">Цена: от
 <output for="priceRangeLow" id="priceRangeLowOutput">0₽</output> до
-<output for="priceRangeHigh" id="priceRangeHighOutput">20000₽</output>
+<output for="priceRangeHigh" id="priceRangeHighOutput">50000₽</output>
 </label>
 <!-- Range slider for selecting price range -->
-<input type="range" min="0" max="20000" value="{{ request.GET.lower_price_range|default:'0' }}" name="lower_price_range" id="priceRangeLow">
-<input type="range" min="0" max="20000" value="{{ request.GET.upper_price_range|default:'10000' }}" name="upper_price_range" id="priceRangeHigh">
+<input type="range" min="0" max="50000" value="{{ request.GET.lower_price_range|default:'0' }}" name="lower_price_range" id="priceRangeLow">
+<input type="range" min="0" max="50000" value="{{ request.GET.upper_price_range|default:'10000' }}" name="upper_price_range" id="priceRangeHigh">
 
 <script>
 const lowerRange = document.getElementById('priceRangeLow');
